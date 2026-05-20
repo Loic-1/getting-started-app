@@ -1,6 +1,8 @@
+const path = require('path');
+process.env.SQLITE_DB_LOCATION = path.join(__dirname, 'todo.db');
 const db = require('../../src/persistence/sqlite');
 const fs = require('fs');
-const location = process.env.SQLITE_DB_LOCATION || '/etc/todos/todo.db';
+const location = process.env.SQLITE_DB_LOCATION;
 
 const ITEM = {
     id: '7aef3d7c-d301-4846-8358-2a91ec9d6be3',
@@ -12,6 +14,10 @@ beforeEach(() => {
     if (fs.existsSync(location)) {
         fs.unlinkSync(location);
     }
+});
+
+afterEach(async () => {
+    await db.teardown();
 });
 
 test('it initializes correctly', async () => {
